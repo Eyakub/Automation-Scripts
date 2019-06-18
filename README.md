@@ -3,18 +3,19 @@ You'll have a project structure like this of Django
 
 ```
 project_name
-|--...
-|--venv
-|   |--
-|   |--
-|--src
-|   |--root_application
-|   |   |--__init__.py
-|   |   |--settings.py
-|   |   |--urls.py
-|   |   |--wsgi.py
+|__...
+|__venv
+|   |__Scripts
+|   |__bin
+|   |...
+|__src
+|   |__root_application
+|   |   |____init__.py
+|   |   |__settings.py
+|   |   |__urls.py
+|   |   |__wsgi.py
 |   |   |...
-|   |--manage.py   
+|   |__manage.py   
 |   
 ```
 
