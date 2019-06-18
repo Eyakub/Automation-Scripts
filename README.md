@@ -17,3 +17,5 @@ project_name
 |   |--manage.py   
 |   
 ```
+
+[I've followed this structure, rest of other application have to create by following this link](https://gist.github.com/Eyakub/9459897a8ae04c12d175b36657b346b7)
