@@ -8,7 +8,7 @@ project_name
 |   |--
 |   |--
 |--src
-|   |--root_project
+|   |--root_application
 |   |   |--__init__.py
 |   |   |--settings.py
 |   |   |--urls.py
