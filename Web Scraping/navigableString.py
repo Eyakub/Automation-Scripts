@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 
 
-
 def read_file():
     file = open('intro_to_soup_html.html')
     data = file.read()
