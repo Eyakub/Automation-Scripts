@@ -3,7 +3,7 @@ import os
 from github import Github
 
 
-path = "/media/eyakub/Important/Django Projects/"
+path = "/mnt/1E4AC8FB4AC8D0A7/DjangoWeb/"
 
 username = ""
 password = ""
@@ -14,7 +14,7 @@ def create():
     os.makedirs(path + str(sys.argv[1]))
     user = Github(username, password).get_user()
     repo = user.create_repo(sys.argv[1])
-    print('directory created')
+    print('directory created', folderName)
 
 
 if __name__ == "__main__":
