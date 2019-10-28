@@ -11,7 +11,7 @@ password = ""
 
 def create():
     folderName = str(sys.argv[1])
-    os.makedirs(path + str(sys.argv[1]))
+    os.makedirs(path + folderName)
     user = Github(username, password).get_user()
     repo = user.create_repo(sys.argv[1])
     print('directory created', folderName)
