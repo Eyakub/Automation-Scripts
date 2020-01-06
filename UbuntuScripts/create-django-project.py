@@ -3,7 +3,7 @@ import os
 from github import Github
 
 
-path = "/mnt/1E4AC8FB4AC8D0A7/DjangoWeb/"
+path = "/Desktop/Eyakub/DjangoProject/"
 
 username = ""
 password = ""

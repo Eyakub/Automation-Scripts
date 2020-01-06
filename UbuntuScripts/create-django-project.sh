@@ -2,17 +2,14 @@
 
 create(){ 
     python3 create-django-project.py $1
-    cd /mnt/1E4AC8FB4AC8D0A7/DjangoWeb/$1
-    mkdir 'src'
+    cd /home/eyakub/Desktop/Eyakub/DjangoProject/$1
     virtualenv venv
-    cd /mnt/1E4AC8FB4AC8D0A7/DjangoWeb/$1
+    cd /home/eyakub/Desktop/Eyakub/DjangoProject/$1
     . venv/bin/activate
     pip3 install django==2.2
-    cd
-    cd /mnt/1E4AC8FB4AC8D0A7/DjangoWeb/$1/src
     django-admin startproject $1 .
+    pip3 freeze > requirements.txt
 
-    cd ..
     git init
     git rm -r --cached .
     touch README.md
