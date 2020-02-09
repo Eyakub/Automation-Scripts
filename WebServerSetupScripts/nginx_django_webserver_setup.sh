@@ -33,6 +33,8 @@ else
     sudo chmod 744 /etc/systemd/system/$nginx_conf.socket
     echo "[Unit]\nDescription=gunicorn socket\n\n[Socket]\nListenStream=$current_location/$nginx_conf.sock\
     \n\n[Install]\nWantedBy=sockets.target">/etc/systemd/system/$nginx_conf.socket
+
+    sudo systemctl enable $nginx_conf.socket
 fi
 
 if [ -f "/etc/nginx/sites-available/$nginx_conf.conf" ]; then
