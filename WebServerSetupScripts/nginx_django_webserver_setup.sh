@@ -41,7 +41,7 @@ else
     sudo touch /etc/nginx/sites-available/$nginx_conf.conf
     sudo chmod +x /etc/nginx/sites-available/$nginx_conf.conf
     printf "server{ \n\tlisten 80;\n\tserver_name $domain_or_ip;\n\tlocation=/favicon.ico{access_log off;log_not_found off;} \
-    \n\tlocation /static/{\n\t\t$current_location;\n\t} \n\tlocation/{ \n\t\tinclude proxy_params; \n\t\tproxy_pass $current_location/$nginx_conf.sock; \n\t} \n}">/etc/nginx/sites-available/$nginx_conf.conf
+    \n\tlocation /static/{\n\t\t$current_location;\n\t} \n\tlocation/{ \n\t\tinclude proxy_params; \n\t\tproxy_pass http://unix:/$current_location/$nginx_conf.sock; \n\t} \n}">/etc/nginx/sites-available/$nginx_conf.conf
 
     sudo ln -s /etc/nginx/sites-available/$nginx_conf.conf /etc/nginx/sites-enabled/$nginx_conf.conf
 fi
