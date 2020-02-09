@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# echo "Enter your virtualenv directory name: "
-# read virtualenv_dir
+echo "Enter your virtualenv directory name: "
+read virtualenv_dir
 
-# source $virtualenv_dir/bin/activate
-# pip install gunicorn
+source $virtualenv_dir/bin/activate
+pip install gunicorn
 
 echo "Enter your WSGI application name (ex: app_name.wsgi:application): "
 read wsgi_application
@@ -25,7 +25,7 @@ else
     sudo chmod 744 /etc/systemd/system/$nginx_conf.service
     echo "[Unit]\nDescription=gunicorn daemon\nRequires=$nginx_conf.socket\nAfter=network.target \
     \n\n[Service]\nUser=$USER\nGroup=www-data\nWorkingDirectory=$current_location \
-    \nExecStart=$current_location/venv/bin/gunicorn \ \
+    \nExecStart=$current_location/$virtualenv_dir/bin/gunicorn \ \
     \n\t--access-logfile - \ \n\t--workers 3 \ \n\t--bind unix:$current_location/$nginx_conf.sock \ \
     \n\t$wsgi_application \n\n[Install] \nWantedBy=multi-user.target">/etc/systemd/system/$nginx_conf.service
 
@@ -40,8 +40,8 @@ if [ -f "/etc/nginx/sites-available/$nginx_conf.conf" ]; then
 else
     sudo touch /etc/nginx/sites-available/$nginx_conf.conf
     sudo chmod +x /etc/nginx/sites-available/$nginx_conf.conf
-    printf "server{ \n\tlisten 80;\n\tserver_name $domain_or_ip;\n\tlocation=/favicon.ico{access_log off;log_not_found off;} \
-    \n\tlocation /static/{\n\t\t$current_location;\n\t} \n\tlocation/{ \n\t\tinclude proxy_params; \n\t\tproxy_pass http://unix:/$current_location/$nginx_conf.sock; \n\t} \n}">/etc/nginx/sites-available/$nginx_conf.conf
+    printf "server{ \n\tlisten 80;\n\tserver_name $domain_or_ip;\n\tlocation = /favicon.ico { access_log off;log_not_found off; } \
+    \n\tlocation /static/ {\n\t\troot $current_location;\n\t} \n\tlocation / { \n\t\tinclude proxy_params; \n\t\tproxy_pass http://unix:/$current_location/$nginx_conf.sock; \n\t} \n}">/etc/nginx/sites-available/$nginx_conf.conf
 
     sudo ln -s /etc/nginx/sites-available/$nginx_conf.conf /etc/nginx/sites-enabled/$nginx_conf.conf
 fi
