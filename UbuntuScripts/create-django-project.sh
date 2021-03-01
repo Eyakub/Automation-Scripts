@@ -2,13 +2,18 @@
 
 create(){ 
     python3 create-django-project.py $1
-    cd /home/eyakub/Desktop/Eyakub/DjangoProject/$1
-    virtualenv venv
-    cd /home/eyakub/Desktop/Eyakub/DjangoProject/$1
+    cd /home/eyakub/Desktop/UbuntuWorkings/Django/$1
+    python3 -m venv venv
+    cd /home/eyakub/Desktop/UbuntuWorkings/Django/$1
     . venv/bin/activate
-    pip3 install django==2.2
+
+    pip3 install django
     django-admin startproject $1 .
     pip3 freeze > requirements.txt
+    mkdir templates
+    mkdir static
+    mkdir media
+    mkdir apps
 
     git init
     git rm -r --cached .
