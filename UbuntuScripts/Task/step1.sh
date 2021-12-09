@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 
-# if docker any older version of docker installed, uninstall it first
-if [-x "$(command -v docker)" ]; then
-    echo "Docker is already installed"
-    sudo apt-get remove docker docker-engine docker.io containerd runc
-    sudo rm -rf /var/lib/docker
-    sudo rm -rf /var/lib/containerd
-    echo "Docker is removed"
-else
+install_docker() {
     echo "Updating..."
     sudo apt-get update
     
@@ -29,14 +22,26 @@ else
     
     sudo apt-get update
     sudo apt-get install docker-ce docker-ce-cli containerd.io
-
-    if [-x "$(command -v docker)" ]; then
+    sudo systemctl start docker
+    if [ -x "$(command -v docker)" ]; then
         echo "Docker is installed..."
-        docker pull docker.elastic.co/elasticsearch/elasticsearch:7.12
-        docker pull docker.elastic.co/kibana/kibana:7.12
+        docker pull docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+        docker pull docker.elastic.co/kibana/kibana:7.5.2
 
     else
         echo "Docker is not installed"
     fi
-fi
+}
 
+# if docker any older version of docker installed, uninstall it first
+if [ -x "$(command -v docker)" ]; then
+    echo "Docker is already installed"
+    sudo apt-get purge -y docker docker-engine docker.io docker-ce docker-ce-cli containerd runc
+    sudo rm -rf /var/lib/docker
+    sudo rm -rf /var/lib/containerd
+    echo "Docker is removed, re-installing docker again..."
+    install_docker
+else
+    echo "calling install docker function..."
+    install_docker
+fi
