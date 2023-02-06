@@ -109,6 +109,7 @@ Steps to run the project locally." > README.md
 # creating a basic docker file
 echo "FROM python:3.10-slim-buster
 
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /usr/src/app
