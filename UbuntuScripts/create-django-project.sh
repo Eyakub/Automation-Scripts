@@ -109,19 +109,20 @@ Steps to run the project locally." > README.md
 # creating a basic docker file
 echo "FROM python:3.10-slim-buster
 
+ENV DockerHome=/usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /usr/src/app
+WORKDIR ${DockerHome}
 
 # install dependencies
 RUN pip install --upgrade pip
-COPY requirements.txt .
+COPY requirements.txt ${DockerHome}
 RUN cp .env.sample .env
 RUN pip install -r requirements.txt
 
 # copy project
-COPY . .
+COPY . ${DockerHome}
 
 EXPOSE 8000
 RUN chmod +x entrypoint.sh
