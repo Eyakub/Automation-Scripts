@@ -22,21 +22,123 @@ create(){
     mkdir static
     mkdir media
     mkdir apps
-    touch README.md
-    touch .gitignore
+    mkdir nginx
+
+    create_file_and_populate "$project_name"
 
     # configure git
     git init
     git rm -r --cached .
-    printf "### "$project_name> README.md
-    printf "*/.vscode/*\n.vscode/*\n.vscode/\nvenv/\n/venv\n/.venv">.gitignore
     git add .
     git commit -m "init commit"
     git remote add origin git@github.com:Eyakub/$project_name.git
-    git push -u origin master
+    if [ "$is_github_repo_create" = "Y" ] || [ "$is_github_repo_create" = "y" ]
+    then
+        git push -u origin master
+    fi
 
     code .
 }
+
+create_file_and_populate() {
+    touch .dockerignore
+
+# Create and write to .env sample file
+    cat <<EOT > .env.sample
+DEBUG=True
+SECRET_KEY='something_key'
+ALLOWED_HOST=*
+DATABASE_URL=postgres://postgres:postgres@db:5432
+
+# Postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=postgres
+EOT
+
+# Create and write the .gitignore file for Django
+    cat <<EOT > .gitignore
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media
+
+# If you are using PyCharm
+.idea/
+.vscode/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+__pycache__/
+EOT
+
+# writing the entrypoint file to run the server
+    cat <<EOT > entrypoint.sh
+#!/bin/bash
+
+python manage.py migrate
+python manage.py runserver 0.0.0.0:8000
+#/usr/local/bin/gunicorn jobs.wsgi:application -w 2 -b :8000
+EOT
+    # chmod +x entrypoint.sh
+
+# writing a basic readme file
+    echo "$1
+=============================
+## Introduction
+
+Add description of your project here.
+
+## Requirements
+
+Add the required dependencies here.
+
+## How to Run
+
+Steps to run the project locally." > README.md
+
+# creating a basic docker file
+echo "FROM python:3.10-slim-buster
+
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /usr/src/app
+
+# install dependencies
+RUN pip install --upgrade pip
+COPY requirements.txt .
+RUN cp .env.sample .env
+RUN pip install -r requirements.txt
+
+# copy project
+COPY . .
+
+EXPOSE 8000
+
+CMD [\"sh\", \"entrypoint.sh\"]" > Dockerfile
+
+# creating basic docker compose command
+echo "version: '3.8'
+
+services:
+  web:
+    build: .
+    command: ./entrypoint.sh
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app" > docker-compose.yml
+}
+
 
 
 echo "Enter your Project/Repo name (recommended pattern: my_django_app/myDjangoApp):"
@@ -44,15 +146,8 @@ read project_name
 
 echo "Do you want to create respository on Github? (Y/N)"
 read is_github_repo_create
-if [ -z "$is_github_repo_create"]; then
-    is_github_repo_create="N"
-fi
 
-echo "Enter the desired Django version: (Default: 4.2)"
+echo "Enter the desired Django version: (Default: 4.0)"
 read django_version
-if [ -z "$django_version" ]
-then
-    django_version="4.2"
-fi
 
-create $project_name $is_github_repo_create $django_version
+create "$project_name" "${is_github_repo_create:-N}" "${django_version:-4.0}"
