@@ -8,6 +8,11 @@ create(){
     path=" /home/eyakub/Desktop/DjangoProject"
 
     python3 create-django-project.py $project_name $is_github_repo_create
+    if [ $? -ne 0 ]; then
+        echo "Error: Python script failed to run"
+        exit 1
+    fi
+    
     cd $path/$project_name
     python3 -m venv venv
     cd $path/$project_name
