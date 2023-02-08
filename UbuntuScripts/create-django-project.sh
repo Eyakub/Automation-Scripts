@@ -118,11 +118,11 @@ WORKDIR ${DockerHome}
 # install dependencies
 RUN pip install --upgrade pip
 COPY requirements.txt ${DockerHome}
-RUN cp .env.sample .env
 RUN pip install -r requirements.txt
 
 # copy project
 COPY . ${DockerHome}
+RUN cp .env.sample .env
 
 EXPOSE 8000
 RUN chmod +x entrypoint.sh
