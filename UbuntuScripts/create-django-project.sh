@@ -112,21 +112,22 @@ Add the required dependencies here.
 Steps to run the project locally." > README.md
 
 # creating a basic docker file
+DockerHome="/usr/src/app"
 echo "FROM python:3.10-slim-buster
 
-ENV DockerHome=/usr/src/app
+ENV DockerHome=${DockerHome}
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR ${DockerHome}
+WORKDIR \${DockerHome}
 
 # install dependencies
 RUN pip install --upgrade pip
-COPY requirements.txt ${DockerHome}
+COPY requirements.txt \${DockerHome}
 RUN pip install -r requirements.txt
 
 # copy project
-COPY . ${DockerHome}
+COPY . \${DockerHome}
 RUN cp .env.sample .env
 
 EXPOSE 8000
